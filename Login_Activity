@@ -1,0 +1,49 @@
+public class Login extends Activity {
+
+    private TextView lblGotoRegister;
+    private Button btnLogin;
+    private EditText inputEmail;
+    private EditText inputPassword;
+    private TextView loginErrorMsg;
+    
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.login);
+        
+        inputEmail = (EditText) findViewById(R.id.txtEmail);
+        inputPassword = (EditText) findViewById(R.id.txtPass);
+        btnLogin = (Button) findViewById(R.id.btnLogin);
+        loginErrorMsg = (TextView) findViewById(R.id.login_error);
+        
+        btnLogin.setOnClickListener(new View.OnClickListener() {
+ 
+            public void onClick(View view) {
+                String email = inputEmail.getText().toString();
+                String password = inputPassword.getText().toString();
+                
+                Usuario usuario = new Usuario();
+                
+                usuario.setOnLoginUsuario(new OnLoginUsuario() {
+     @Override
+     public void onLoginWrong(String msg) {loginErrorMsg.setText(msg);}
+     @Override
+     public void onLoginCorrect(JSONObject json, String msg) {
+      loginErrorMsg.setText("");
+      Intent itemintent = new Intent(Login.this, ActivityPrincipal.class);
+  Login.this.startActivity(itemintent);
+     }
+    });                
+                usuario.login(Login.this, email, password);
+            }
+        });
+        
+        lblGotoRegister = (TextView) findViewById(R.id.link_to_register);
+        lblGotoRegister.setOnClickListener(new OnClickListener() {
+   @Override
+   public void onClick(View v) {Intent itemintent = new Intent(Login.this, Register.class);
+  Login.this.startActivity(itemintent);}
+  });
+    }
+ 
+}
